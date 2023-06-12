@@ -81,3 +81,49 @@ function updateChart(selectedSample) {
       });
   }
   
+
+
+  function updateChart(selectedSample) {
+    d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json")
+      .then(function(data) {
+        var samples = data.samples;
+        var selectedData = samples.find(function(sample) {
+          return sample.id === selectedSample;
+        });
+  
+        // Extract bubble chart data
+        var otuIds = selectedData.otu_ids;
+        var sampleValues = selectedData.sample_values;
+        var markerSizes = selectedData.sample_values;
+        var markerColors = selectedData.otu_ids;
+        var textValues = selectedData.otu_labels;
+  
+        // Create the bubble chart
+        var trace = {
+          x: otuIds,
+          y: sampleValues,
+          text: textValues,
+          mode: "markers",
+          marker: {
+            size: markerSizes,
+            color: markerColors
+          }
+        };
+  
+        var layout = {
+          title: "Bubble Chart",
+          xaxis: { title: "OTU IDs" },
+          yaxis: { title: "Sample Values" }
+        };
+  
+        var chartData = [trace];
+  
+        Plotly.newPlot("bubble", chartData, layout);
+      })
+      .catch(function(error) {
+        console.error(error);
+      });
+  }
+  
+
+  
